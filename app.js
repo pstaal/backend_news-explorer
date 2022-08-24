@@ -1,8 +1,14 @@
 const express = require('express');
+
+const users = require('./routes/users');
+const articles = require('./routes/articles');
 // listen to port 3000
 const { PORT = 3000 } = process.env;
 
 const app = express();
+
+app.use('/articles', articles);
+app.use('/users', users);
 
 app.get('/', (req, res) => {
   res.send('app is working!')
