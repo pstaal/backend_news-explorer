@@ -1,0 +1,24 @@
+{
+  "name": "backend-news-explorer",
+  "version": "1.0.0",
+  "description": "The backend for frontend-news-explorer",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pstaal/backend_news-explorer.git"
+  },
+  "author": "peter staal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pstaal/backend_news-explorer/issues"
+  },
+  "homepage": "https://github.com/pstaal/backend_news-explorer#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "nodemon": "^2.0.19"
+  }
+}
