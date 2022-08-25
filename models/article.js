@@ -48,7 +48,6 @@ const articleSchema = new mongoose.Schema({
     required: [true, 'an owner is required'],
     select: false
   }
-
 });
 
 // create the model and export it

@@ -2,17 +2,13 @@ const articles = require('express').Router();
 
 const { celebrate, Joi } = require('celebrate');
 
+const  { getArticles, createArticle, removeArticle } = require('../controllers/articles');
 
-articles.get('/', (req,res) => {
-  res.send('get all articles');
-});
 
-articles.post('/', (req,res) => {
-  res.send('get all articles');
-});
+articles.get('/', getArticles);
 
-articles.delete('/:articleId', (req,res) => {
-  res.send('get all articles');
-});
+articles.post('/', createArticle);
+
+articles.delete('/:articleId', removeArticle);
 
 module.exports = articles;
