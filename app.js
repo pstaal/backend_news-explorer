@@ -4,6 +4,7 @@ require('dotenv').config();
 
 const users = require('./routes/users');
 const articles = require('./routes/articles');
+const errorMiddleware = require('./middleware/errorMiddleware');
 
 const {
   login,
@@ -29,6 +30,8 @@ app.use(auth);
 app.use('/articles', articles);
 app.use('/users', users);
 
+//error middleware
+app.use(errorMiddleware);
 
 app.listen(PORT, () => {
   // if everything works fine, the console will show which port the application is listening to

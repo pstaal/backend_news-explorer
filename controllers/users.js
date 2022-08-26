@@ -3,11 +3,20 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
+const NotFoundError = require('../errors/not-found-error');
+const BadRequestError = require('../errors/bad-request-error');
+const ConflictError = require('../errors/conflict-error');
 
 const getUser = (req,res) => {
   User.findById(req.user._id)
+  .orFail(new NotFoundError('No documents were found!'))
   .then(user => res.send({ data: user }))
-  .catch(err => res.status(500).send({ message: 'Error' }));
+  .catch((err) => {
+    if (err.name === 'CastError') {
+      next(new BadRequestError("This is not a valid ID"));
+    }
+    next(err);
+  });
 };
 
 const createUser = (req, res) => {
@@ -17,7 +26,15 @@ const createUser = (req, res) => {
     User.create({ email, password: hash, name})
   })
   .then((user) => res.send(user))
-  .catch((err) => res.status(400).send(err));
+  .catch((err) => {
+    if (err.name === 'DocumentNotFoundError') return next(new NotFoundError('Could not find the document'));
+    if (err.name === 'MongoServerError') return next(new ConflictError('This email is already in use'));
+    if (err.name === 'ValidatorError') return next(new BadRequestError(err.message));
+    if (err.name === 'ValidationError') {
+      return next(new BadRequestError(`${Object.values(err.errors).map((error) => error.message).join(', ')}`));
+    }
+    next(err);
+  });
 };
 
 const login = (req,res) => {
@@ -32,13 +49,7 @@ const login = (req,res) => {
       // we return the token
       res.send({ token });
     })
-    .catch((err) => {
-            // authentication error
-      res
-        .status(401)
-        .send({ message: err.message });
-    });
-
+    .catch(next);
 };
 
 module.exports = { getUser, createUser, login };
