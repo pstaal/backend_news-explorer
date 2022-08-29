@@ -7,7 +7,7 @@ const NotFoundError = require('../errors/not-found-error');
 const BadRequestError = require('../errors/bad-request-error');
 const ConflictError = require('../errors/conflict-error');
 
-const getUser = (req,res) => {
+const getUser = (req,res, next) => {
   User.findById(req.user._id)
   .orFail(new NotFoundError('No documents were found!'))
   .then(user => res.send({ data: user }))
@@ -19,7 +19,7 @@ const getUser = (req,res) => {
   });
 };
 
-const createUser = (req, res) => {
+const createUser = (req, res, next) => {
   const { email, password, name } = req.body;
   bcrypt.hash(password, 10)
   .then((hash) => {
@@ -37,7 +37,7 @@ const createUser = (req, res) => {
   });
 };
 
-const login = (req,res) => {
+const login = (req,res, next) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)

@@ -2,15 +2,16 @@ const Article = require('../models/article');
 
 const ForbiddenError = require('../errors/forbidden-error');
 const BadRequestError = require('../errors/bad-request-error');
+const NotFoundError = require('../errors/not-found-error');
 
-const getArticles = (req,res) => {
+const getArticles = (req ,res, next) => {
   Article.find({})
     .populate(['owner'])
     .then(article => res.send({ data: article }))
     .catch(next);
 };
 
-const createArticle = (req, res) => {
+const createArticle = (req, res, next) => {
   const { keyword, title, text, date, source, link, image } = req.body;
   const owner = req.user._id;
 
@@ -27,8 +28,10 @@ const createArticle = (req, res) => {
     });
 };
 
-const removeArticle = (req,res) => {
+const removeArticle = (req,res, next) => {
   Article.findByIdAndRemove(req.params.articleId)
+    .populate(['owner'])
+    .orFail(new NotFoundError('No documents were found!'))
     .then(article => {
       if (article.owner._id.toString() !== req.user._id){
         return next(new ForbiddenError("You can only delete your own cards"));

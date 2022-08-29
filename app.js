@@ -13,7 +13,7 @@ const {
 } = require('./controllers/users');
 
 const auth = require('./middleware/auth');
-const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { requestLogger, errorLogger } = require('./middleware/logger');
 
 // listen to port 3000
 const { PORT = 3000 } = process.env;
