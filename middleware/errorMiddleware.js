@@ -1,4 +1,4 @@
-module.exports = (err, req, res, next) => {
+module.exports = (err, req, res) => {
   // if an error has no status, display 500
   const { statusCode = 500, message } = err;
   res
@@ -7,6 +7,6 @@ module.exports = (err, req, res, next) => {
       // check the status and display a message based on it
       message: statusCode === 500
         ? 'An error occurred on the server'
-        : message
+        : message,
     });
 };

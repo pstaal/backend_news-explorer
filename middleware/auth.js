@@ -1,8 +1,8 @@
 // middleware/auth.js
 const jwt = require('jsonwebtoken');
+
 const { NODE_ENV, JWT_SECRET } = process.env;
 const UnauthorizedError = require('../errors/unauthorized-error');
-
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
@@ -23,5 +23,5 @@ module.exports = (req, res, next) => {
 
   req.user = payload; // assigning the payload to the request object
 
-  next(); // sending the request to the next middleware
+  return next(); // sending the request to the next middleware
 };

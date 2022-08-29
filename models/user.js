@@ -18,18 +18,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'a password is required'],
     minlength: 8,
-    select: false
+    select: false,
   },
   name: {
     type: String,
-    default: "Peter",
+    default: 'Peter',
     required: [true, 'a name is required'],
     minlength: [2, 'the minimum length of a name should be 2 characters'],
     maxlength: [30, 'the maximum length of a name should be 30 characters'],
-  }
+  },
 });
 
-userSchema.statics.findUserByCredentials = function findUserByCredentials (email, password) {
+userSchema.statics.findUserByCredentials = function findUserByCredentials(email, password) {
   return this.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {

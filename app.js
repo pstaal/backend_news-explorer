@@ -2,14 +2,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
+const { celebrate, Joi, errors } = require('celebrate');
 const users = require('./routes/users');
 const articles = require('./routes/articles');
 const errorMiddleware = require('./middleware/errorMiddleware');
-const { celebrate, Joi, errors } = require('celebrate');
 
 const {
   login,
-  createUser
+  createUser,
 } = require('./controllers/users');
 
 const auth = require('./middleware/auth');
@@ -30,10 +30,9 @@ app.post('/signup', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required(),
     password: Joi.string().required(),
-    name: Joi.string().required()
-}),
+    name: Joi.string().required(),
+  }),
 }), createUser);
-
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
@@ -51,10 +50,10 @@ app.use(errorLogger); // enabling the error logger
 
 app.use(errors()); // celebrate error handler
 
-//error middleware
+// error middleware
 app.use(errorMiddleware);
 
 app.listen(PORT, () => {
   // if everything works fine, the console will show which port the application is listening to
   console.log(`App listening at port ${PORT}`);
-})
+});
