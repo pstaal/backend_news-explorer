@@ -13,6 +13,10 @@ module.exports = (req, res, next) => {
 
   const token = authorization.replace('Bearer ', '');
 
+  console.log(token);
+  console.log(NODE_ENV);
+  console.log(JWT_SECRET);
+
   let payload;
 
   try {
