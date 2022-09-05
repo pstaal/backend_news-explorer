@@ -5,7 +5,6 @@ const helmet = require('helmet');
 const { errors } = require('celebrate');
 const router = require('./routes/index');
 
-
 const errorMiddleware = require('./middleware/errorMiddleware');
 
 const { limiter } = require('./utils/limiter');
