@@ -5,7 +5,8 @@ const BadRequestError = require('../errors/bad-request-error');
 const NotFoundError = require('../errors/not-found-error');
 
 const getArticles = (req, res, next) => {
-  Article.find({})
+  const owner = req.user._id;
+  Article.find({ owner })
     .populate(['owner'])
     .then((article) => res.send({ data: article }))
     .catch(next);

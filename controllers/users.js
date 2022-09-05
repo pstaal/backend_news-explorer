@@ -28,7 +28,7 @@ const createUser = (req, res, next) => {
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError') return next(new NotFoundError('Could not find the document'));
-      if (err.name === 'MongoServerError') return next(new ConflictError('This email is already in use'));
+      if (err.name === 'MongoError' && err.code === 11000) return next(new ConflictError('This email is already in use'));
       if (err.name === 'ValidatorError') return next(new BadRequestError(err.message));
       if (err.name === 'ValidationError') {
         return next(new BadRequestError(`${Object.values(err.errors).map((error) => error.message).join(', ')}`));
