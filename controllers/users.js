@@ -6,6 +6,7 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 const NotFoundError = require('../errors/not-found-error');
 const BadRequestError = require('../errors/bad-request-error');
 const ConflictError = require('../errors/conflict-error');
+const InternalServerError = require('../errors/internal-server-error');
 
 const getUser = (req, res, next) => {
   User.findById(req.user._id)
@@ -15,7 +16,7 @@ const getUser = (req, res, next) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('This is not a valid ID'));
       }
-      next(err);
+      next(new InternalServerError('An error has occurred with the server'));
     });
 };
 
@@ -33,7 +34,7 @@ const createUser = (req, res, next) => {
       if (err.name === 'ValidationError') {
         return next(new BadRequestError(`${Object.values(err.errors).map((error) => error.message).join(', ')}`));
       }
-      return next(err);
+      return next(new InternalServerError('An error has occurred with the server'));
     });
 };
 
@@ -48,7 +49,9 @@ const login = (req, res, next) => {
       // we return the token
       res.send({ token });
     })
-    .catch(next);
+    .catch(() => {
+      next(new InternalServerError('An error has occurred with the server'));
+    });
 };
 
 module.exports = { getUser, createUser, login };
