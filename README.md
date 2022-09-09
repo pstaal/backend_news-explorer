@@ -1,3 +1,3 @@
 The backend for frontend-news-explorer
 
-The server address is http://35.203.143.120:3000 
+The server address is https://api.petertje.students.nomoredomainssbs.ru/
