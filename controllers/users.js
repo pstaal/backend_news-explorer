@@ -23,9 +23,7 @@ const getUser = (req, res, next) => {
 const createUser = (req, res, next) => {
   const { email, password, name } = req.body;
   bcrypt.hash(password, 10)
-    .then((hash) => {
-      User.create({ email, password: hash, name });
-    })
+    .then((hash) => User.create({ email, password: hash, name }))
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError') return next(new NotFoundError('Could not find the document'));
