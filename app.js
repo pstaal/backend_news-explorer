@@ -4,6 +4,7 @@ require('dotenv').config();
 const helmet = require('helmet');
 const { errors } = require('celebrate');
 const router = require('./routes/index');
+const cors = require('cors');
 
 const errorMiddleware = require('./middleware/errorMiddleware');
 
@@ -21,6 +22,10 @@ app.use(helmet());
 app.use(limiter);
 
 mongoose.connect(DATABASE_URL);
+
+// include these before other routes
+app.use(cors());
+app.options('*', cors());
 
 app.use(requestLogger); // enabling the request logger
 
