@@ -1,5 +1,6 @@
 module.exports = (err, req, res, next) => {
   // if an error has no status, display 500
+  console.error(err);
   const { statusCode = 500, message } = err;
   res
     .status(statusCode)
