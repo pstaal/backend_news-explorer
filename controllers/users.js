@@ -26,7 +26,7 @@ const createUser = (req, res, next) => {
     .then((hash) => {
       User.create({ email, password: hash, name });
     })
-    .then((user) => res.send(user))
+    .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError') return next(new NotFoundError('Could not find the document'));
       if (err.name === 'MongoError' && err.code === 11000) return next(new ConflictError('This email is already in use'));
