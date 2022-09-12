@@ -12,7 +12,7 @@ const { limiter } = require('./utils/limiter');
 const { requestLogger, errorLogger } = require('./middleware/logger');
 
 // listen to port 3000
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, DATABASE_URL } = process.env;
 
 const app = express();
 
@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(limiter);
 
-mongoose.connect('mongodb://localhost:27017/newsdb');
+mongoose.connect(DATABASE_URL);
 
 app.use(requestLogger); // enabling the request logger
 
