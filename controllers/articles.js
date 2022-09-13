@@ -9,7 +9,7 @@ const getArticles = (req, res, next) => {
   const owner = req.user._id;
   Article.find({ owner })
     .populate(['owner'])
-    .then((article) => res.send({ data: article }))
+    .then((articles) => res.send({ data: articles }))
     .catch(() => {
       next(new InternalServerError('An error has occurred with the server'));
     });
