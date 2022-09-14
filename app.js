@@ -13,7 +13,7 @@ const { limiter } = require('./utils/limiter');
 const { requestLogger, errorLogger } = require('./middleware/logger');
 
 // listen to port 3000
-const { PORT = 3000, DATABASE_URL } = process.env;
+const { PORT = 3000, DATABASE_URL = 'mongodb://localhost:27017/newsdb' } = process.env;
 
 const app = express();
 
