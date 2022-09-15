@@ -3,16 +3,13 @@ const Article = require('../models/article');
 const ForbiddenError = require('../errors/forbidden-error');
 const BadRequestError = require('../errors/bad-request-error');
 const NotFoundError = require('../errors/not-found-error');
-const InternalServerError = require('../errors/internal-server-error');
 
 const getArticles = (req, res, next) => {
   const owner = req.user._id;
   Article.find({ owner })
     .populate(['owner'])
     .then((articles) => res.send({ data: articles }))
-    .catch(() => {
-      next(new InternalServerError('An error has occurred with the server'));
-    });
+    .catch(next); // catch added
 };
 
 const createArticle = (req, res, next) => {
@@ -32,7 +29,7 @@ const createArticle = (req, res, next) => {
       if (err.name === 'ValidatorError') {
         next(new BadRequestError(err.message));
       }
-      next(new InternalServerError('An error has occurred with the server'));
+      next(err);
     });
 };
 
@@ -50,7 +47,7 @@ const removeArticle = (req, res, next) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('This is not a valid ID'));
       }
-      next(new InternalServerError('An error has occurred with the server'));
+      next(err);
     });
 };
 

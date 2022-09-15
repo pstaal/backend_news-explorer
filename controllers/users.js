@@ -6,7 +6,6 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 const NotFoundError = require('../errors/not-found-error');
 const BadRequestError = require('../errors/bad-request-error');
 const ConflictError = require('../errors/conflict-error');
-const InternalServerError = require('../errors/internal-server-error');
 
 const getUser = (req, res, next) => {
   User.findById(req.user._id)
@@ -16,7 +15,7 @@ const getUser = (req, res, next) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('This is not a valid ID'));
       }
-      next(new InternalServerError('An error has occurred with the server'));
+      return next(err);
     });
 };
 
@@ -26,14 +25,13 @@ const createUser = (req, res, next) => {
     .then((hash) => User.create({ email, password: hash, name }))
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      console.error(err);
       if (err.name === 'DocumentNotFoundError') return next(new NotFoundError('Could not find the document'));
       if (err.name === 'MongoError' && err.code === 11000) return next(new ConflictError('This email is already in use'));
       if (err.name === 'ValidatorError') return next(new BadRequestError(err.message));
       if (err.name === 'ValidationError') {
         return next(new BadRequestError(`${Object.values(err.errors).map((error) => error.message).join(', ')}`));
       }
-      return next(new InternalServerError('An error has occurred with the server'));
+      return next(err);
     });
 };
 
@@ -48,9 +46,7 @@ const login = (req, res, next) => {
       // we return the token
       res.send({ token });
     })
-    .catch(() => {
-      next(new InternalServerError('An error has occurred with the server'));
-    });
+    .catch(next);
 };
 
 module.exports = { getUser, createUser, login };
